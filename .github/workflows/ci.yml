@@ -13,33 +13,43 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  repository-baseline:
+  backend:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r backend/requirements.txt
+      - run: ruff check backend
+      - run: PYTHONPATH=backend pytest -q backend/tests
 
-      - name: Validate required template files
-        shell: bash
-        run: |
-          set -euo pipefail
-          required=(
-            README.md
-            ABOUT.md
-            CONTRIBUTING.md
-            SECURITY.md
-            CODE_OF_CONDUCT.md
-            CHANGELOG.md
-            ROADMAP.md
-            IMPLEMENTATION-CHECKLIST.md
-            .github/PULL_REQUEST_TEMPLATE.md
-            .github/dependabot.yml
-          )
-          for path in "${required[@]}"; do
-            test -f "$path" || { echo "Missing required file: $path"; exit 1; }
-          done
+  dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build
 
-      - name: Check for common secret file names
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker compose build
+
+  repository-security-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Reject common tracked secret files
         shell: bash
         run: |
           set -euo pipefail
@@ -47,8 +57,3 @@ jobs:
             echo 'Potential secret-bearing file is tracked.'
             exit 1
           fi
-
-      - name: Validate YAML syntax
-        shell: bash
-        run: |
-          ruby -e 'require "yaml"; Dir.glob(".github/**/*.{yml,yaml}").each { |f| YAML.load_file(f); puts "ok #{f}" }'
