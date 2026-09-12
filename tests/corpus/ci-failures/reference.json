@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "ci-typescript-module-resolution-removed",
+      "symptom": "TS5108: Option 'moduleResolution=node10' has been removed",
+      "stage": "frontend-build",
+      "root_cause": "obsolete TypeScript module resolution mode",
+      "expected_fix": "use Bundler or another supported resolution mode",
+      "verification": ["npm run build", "container build"]
+    },
+    {
+      "id": "ci-dependency-review-vulnerable-pytest",
+      "symptom": "Dependency review detected vulnerable packages",
+      "stage": "dependency-review",
+      "root_cause": "pytest 8.4.1 matched GHSA-6w46-j5rx-g56g",
+      "expected_fix": "upgrade to a non-vulnerable release and re-run dependency review",
+      "verification": ["dependency-review", "pytest"]
+    },
+    {
+      "id": "ci-pages-no-lockfile",
+      "symptom": "npm ci requires an existing package-lock.json",
+      "stage": "pages-build",
+      "root_cause": "workflow assumed lockfile that repository did not contain",
+      "expected_fix": "either commit a lockfile and use npm ci or use npm install until lockfile adoption",
+      "verification": ["pages-build"]
+    },
+    {
+      "id": "ci-pages-backend-unavailable",
+      "symptom": "static GitHub Pages dashboard receives 404 for /api/*",
+      "stage": "runtime-smoke",
+      "root_cause": "GitHub Pages hosts static assets only",
+      "expected_fix": "explicit read-only demo mode or configure a separately deployed API base URL",
+      "verification": ["pages-demo-mode", "no-mutation-controls"]
+    }
+  ]
+}
