@@ -1,5 +1,9 @@
 # ZEARN
 
+<p align="center">
+  <img src="./assets/zearn-social-preview.svg" alt="ZEARN — AI-powered on-chain intelligence and paper copy-trading control plane" width="100%" />
+</p>
+
 [![CI](https://github.com/cvsz/zearn/actions/workflows/ci.yml/badge.svg)](https://github.com/cvsz/zearn/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/cvsz/zearn/actions/workflows/codeql.yml/badge.svg)](https://github.com/cvsz/zearn/actions/workflows/codeql.yml)
 [![Dependency Review](https://github.com/cvsz/zearn/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cvsz/zearn/actions/workflows/dependency-review.yml)
