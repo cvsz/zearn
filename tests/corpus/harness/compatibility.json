@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "surfaces": [
+    {"name": "Claude", "instruction_file": "AGENTS.md", "required": ["repo_scope", "safety_invariants", "validation_commands"], "status": "reference-defined"},
+    {"name": "Codex", "instruction_file": "AGENTS.md", "required": ["repo_scope", "safety_invariants", "validation_commands"], "status": "reference-defined"},
+    {"name": "OpenCode", "instruction_file": "AGENTS.md", "required": ["repo_scope", "no_secret_access", "definition_of_done"], "status": "reference-defined"},
+    {"name": "Zed", "instruction_file": "AGENTS.md", "required": ["repo_scope", "formatting_independence", "safe_defaults"], "status": "reference-defined"},
+    {"name": "dmux", "instruction_file": "AGENTS.md", "required": ["multi_agent_non_interference", "branch_isolation", "no_force_push_without_authorization"], "status": "reference-defined"},
+    {"name": "generic-agent", "instruction_file": "AGENTS.md", "required": ["paper_mode_default", "live_execution_locked", "test_before_claim"], "status": "reference-defined"}
+  ],
+  "adapter_contract": {
+    "must_read": ["AGENTS.md", "SECURITY.md", "docs/production-readiness.md"],
+    "must_not": ["read_private_keys", "disable_kill_switch", "claim_production_ready_without_evidence"],
+    "completion_evidence": ["changed_files", "tests_run", "security_impact", "remaining_blockers"]
+  }
+}

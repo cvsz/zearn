@@ -1,0 +1,20 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "zearn-backend-declared-dependencies",
+  "documentNamespace": "https://github.com/cvsz/zearn/security/evidence/backend-declared-sbom",
+  "creationInfo": {"creators": ["Tool: ZEARN evidence baseline"], "created": "2026-09-13T00:00:00Z"},
+  "packages": [
+    {"name":"fastapi","SPDXID":"SPDXRef-Package-fastapi","versionInfo":"0.116.1","downloadLocation":"NOASSERTION"},
+    {"name":"uvicorn","SPDXID":"SPDXRef-Package-uvicorn","versionInfo":"0.35.0","downloadLocation":"NOASSERTION"},
+    {"name":"pydantic-settings","SPDXID":"SPDXRef-Package-pydantic-settings","versionInfo":"2.10.1","downloadLocation":"NOASSERTION"},
+    {"name":"sqlalchemy","SPDXID":"SPDXRef-Package-sqlalchemy","versionInfo":"2.0.43","downloadLocation":"NOASSERTION"},
+    {"name":"psycopg","SPDXID":"SPDXRef-Package-psycopg","versionInfo":"3.2.9","downloadLocation":"NOASSERTION"},
+    {"name":"redis","SPDXID":"SPDXRef-Package-redis","versionInfo":"6.4.0","downloadLocation":"NOASSERTION"},
+    {"name":"httpx","SPDXID":"SPDXRef-Package-httpx","versionInfo":"0.28.1","downloadLocation":"NOASSERTION"},
+    {"name":"web3","SPDXID":"SPDXRef-Package-web3","versionInfo":"7.13.0","downloadLocation":"NOASSERTION"},
+    {"name":"pytest","SPDXID":"SPDXRef-Package-pytest","versionInfo":"8.4.2","downloadLocation":"NOASSERTION"},
+    {"name":"ruff","SPDXID":"SPDXRef-Package-ruff","versionInfo":"0.12.9","downloadLocation":"NOASSERTION"}
+  ]
+}

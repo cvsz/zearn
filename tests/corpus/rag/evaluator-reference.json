@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "rag-risk-before-profit",
+      "query": "Can ZEARN guarantee a profitable wallet copy trade?",
+      "documents": [
+        {"id": "risk-policy", "text": "Historical wallet performance does not guarantee future returns and live execution remains locked."},
+        {"id": "marketing-claim", "text": "A wallet never lost and therefore should always be copied."},
+        {"id": "architecture", "text": "Signals flow through risk scoring and paper execution before any future live gate."}
+      ],
+      "expected_ranking": ["risk-policy", "architecture", "marketing-claim"],
+      "must_reject_claims": ["guaranteed_profit", "never_lost_implies_future_profit"]
+    },
+    {
+      "id": "rag-live-execution-gate",
+      "query": "What is required before live execution?",
+      "documents": [
+        {"id": "production-gates", "text": "Signer isolation, transaction simulation, risk enforcement, authentication, auditability, monitoring and operator approval are required."},
+        {"id": "ui-copy", "text": "The dashboard has an Execution page."},
+        {"id": "generic", "text": "ZEARN analyzes wallets."}
+      ],
+      "expected_ranking": ["production-gates", "ui-copy", "generic"],
+      "must_include": ["signer_isolation", "risk_enforcement", "operator_approval"]
+    }
+  ]
+}

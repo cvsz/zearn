@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "discussion-informational",
+      "input": {"title": "How does paper mode work?", "body": "I am reading the docs and want to understand whether trades are submitted on-chain."},
+      "expected": {"classification": "informational", "response_required": true, "close_after_answer": false}
+    },
+    {
+      "id": "discussion-answered",
+      "input": {"title": "Where is the production gate documented?", "body": "Resolved: docs/production-readiness.md answered this."},
+      "expected": {"classification": "answered", "response_required": false, "close_after_answer": true}
+    },
+    {
+      "id": "discussion-no-response",
+      "input": {"title": "Automated spam", "body": "Unrelated repeated promotion with no ZEARN question or actionable request."},
+      "expected": {"classification": "no-response", "response_required": false, "close_after_answer": true}
+    }
+  ]
+}
