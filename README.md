@@ -1,5 +1,14 @@
 # ZEARN
 
+[![CI](https://github.com/cvsz/zearn/actions/workflows/ci.yml/badge.svg)](https://github.com/cvsz/zearn/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/cvsz/zearn/actions/workflows/codeql.yml/badge.svg)](https://github.com/cvsz/zearn/actions/workflows/codeql.yml)
+[![Dependency Review](https://github.com/cvsz/zearn/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/cvsz/zearn/actions/workflows/dependency-review.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue.svg)](backend/requirements.txt)
+[![React + TypeScript](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-3178C6.svg)](frontend/package.json)
+[![Execution: Paper Only](https://img.shields.io/badge/Execution-Paper%20Only-orange.svg)](docs/production-readiness.md)
+[![Live Funds: Locked](https://img.shields.io/badge/Live%20Funds-Locked-critical.svg)](docs/production-readiness.md)
+
 **Autonomous wallet intelligence + paper copy-trading control plane**
 
 ZEARN analyzes blockchain wallet behavior, ranks candidate wallets, generates risk-scored signals, simulates copy trades, and exposes all operating controls through a dashboard. The repository is intentionally **paper-trading first**. Live execution is blocked in the baseline until custody, signer isolation, simulation, risk enforcement, and operational approvals are implemented and evidenced.
@@ -106,6 +115,10 @@ Planned production components include PostgreSQL, Redis queues, chain indexers, 
 ## Current status
 
 This branch establishes the application baseline and control plane. It is **not yet production-ready for live funds**. The current execution mode is intentionally paper-only.
+
+## Agent instructions
+
+AI coding agents working in this repository must follow [`AGENTS.md`](AGENTS.md). Safety invariants, live-funds restrictions, validation requirements, and scope rules in that file are mandatory.
 
 ## License
 
