@@ -13,6 +13,44 @@ const pages: {name:Page; icon:any}[] = [
   {name:'Execution',icon:LockKeyhole},{name:'Alerts',icon:AlertTriangle},{name:'Audit Log',icon:ListChecks},{name:'Settings',icon:Settings}
 ];
 
+const isPages = import.meta.env.VITE_GITHUB_PAGES === 'true';
+
+const demoOverview: Overview = {
+  mode: 'paper-demo',
+  trading_enabled: false,
+  kill_switch: true,
+  tracked_wallets: 14000,
+  paper_equity_usd: 300,
+  paper_pnl_usd: 0,
+  open_positions: 0,
+  alerts: ['GitHub Pages demo mode — no backend or live execution is connected.']
+};
+
+const demoWallets: Wallet[] = [
+  {address:'0xA1…91F2',score:92,win_rate:0.71,realized_pnl_usd:18420,max_drawdown_pct:8.4},
+  {address:'0xB7…44C9',score:88,win_rate:0.67,realized_pnl_usd:11980,max_drawdown_pct:10.2},
+  {address:'0xC3…0AF1',score:84,win_rate:0.64,realized_pnl_usd:8640,max_drawdown_pct:12.7}
+];
+
+const demoSignals = [
+  {id:'demo-001',chain:'BSC',pair:'BNB/USDT',side:'observe',confidence:0.86,status:'paper-only'},
+  {id:'demo-002',chain:'BSC',pair:'TOKEN/USDT',side:'blocked',confidence:0.74,status:'risk-review'}
+];
+
+const demoRisk = {
+  max_position_pct: 5,
+  max_daily_loss_pct: 2,
+  max_drawdown_pct: 10,
+  max_slippage_bps: 75,
+  min_liquidity_usd: 100000,
+  live_execution: false
+};
+
+const demoAudit = [
+  {time:'demo',event:'pages_mode_enabled',actor:'system',result:'read-only'},
+  {time:'demo',event:'live_execution_check',actor:'system',result:'blocked'}
+];
+
 const api = (path:string) => fetch(path).then(r=>{if(!r.ok) throw new Error(`${r.status}`); return r.json()});
 
 export default function App(){
@@ -24,9 +62,21 @@ export default function App(){
   const [audit,setAudit]=useState<any[]>([]);
   const [error,setError]=useState('');
 
-  const refresh=()=>Promise.all([
-    api('/api/overview').then(setOverview),api('/api/wallets').then(setWallets),api('/api/signals').then(setSignals),api('/api/risk').then(setRisk),api('/api/audit').then(setAudit)
-  ]).catch(()=>setError('API unavailable — start the backend or use docker compose.'));
+  const loadDemo=()=>{
+    setOverview(demoOverview);
+    setWallets(demoWallets);
+    setSignals(demoSignals);
+    setRisk(demoRisk);
+    setAudit(demoAudit);
+    setError('GitHub Pages demo mode — static read-only dashboard. No FastAPI backend, wallet signer, or live funds are connected.');
+  };
+
+  const refresh=()=>{
+    if(isPages){ loadDemo(); return Promise.resolve([]); }
+    return Promise.all([
+      api('/api/overview').then(setOverview),api('/api/wallets').then(setWallets),api('/api/signals').then(setSignals),api('/api/risk').then(setRisk),api('/api/audit').then(setAudit)
+    ]).catch(()=>setError('API unavailable — start the backend or use docker compose.'));
+  };
   useEffect(()=>{refresh()},[]);
 
   const title=useMemo(()=>page,[page]);
@@ -43,7 +93,7 @@ export default function App(){
       {page==='Paper Trades'&&<Empty title="Paper Trade Ledger" text="Simulation executions, fees, slippage and realized PnL appear here. No live orders are sent."/>}
       {page==='Portfolio'&&<Empty title="Portfolio" text="Paper balances, exposures, allocation, PnL attribution and drawdown analytics."/>}
       {page==='Risk'&&<RiskPage risk={risk}/>} 
-      {page==='Execution'&&<ExecutionPage overview={overview} refresh={refresh}/>} 
+      {page==='Execution'&&<ExecutionPage overview={overview} refresh={refresh} pagesMode={isPages}/>} 
       {page==='Alerts'&&<Empty title="Alerts" text="Risk breaches, RPC degradation, abnormal slippage, contract-risk warnings and execution blocks."/>}
       {page==='Audit Log'&&<AuditPage audit={audit}/>} 
       {page==='Settings'&&<Empty title="Settings" text="Chain RPCs, scanner cadence, notification providers and operator preferences. Secrets must stay server-side."/>}
@@ -55,7 +105,7 @@ function OverviewPage({o}:{o:Overview|null}){const cards=[['Paper Equity',`$${o?
 function WalletsPage({wallets}:{wallets:Wallet[]}){return <section className="panel"><div className="panelHead"><div><h3>Smart Wallet Leaderboard</h3><p>Ranked from observed historical behavior. Scores do not imply future profit.</p></div></div><table><thead><tr><th>Wallet</th><th>Score</th><th>Win rate</th><th>Realized PnL</th><th>Max DD</th></tr></thead><tbody>{wallets.map(w=><tr key={w.address}><td className="mono">{w.address}</td><td><b>{w.score}</b>/100</td><td>{(w.win_rate*100).toFixed(1)}%</td><td>${w.realized_pnl_usd.toFixed(2)}</td><td>{w.max_drawdown_pct}%</td></tr>)}</tbody></table></section>}
 function SignalsPage({signals}:{signals:any[]}){return <section className="panel"><h3>Signal Queue</h3><table><thead><tr><th>ID</th><th>Chain</th><th>Pair</th><th>Side</th><th>Confidence</th><th>Status</th></tr></thead><tbody>{signals.map(s=><tr key={s.id}><td className="mono">{s.id}</td><td>{s.chain}</td><td>{s.pair}</td><td>{s.side}</td><td>{(s.confidence*100).toFixed(0)}%</td><td><span className="pill">{s.status}</span></td></tr>)}</tbody></table></section>}
 function RiskPage({risk}:{risk:any}){return <section className="panel"><h3>Risk Envelope</h3><div className="riskgrid">{risk&&Object.entries(risk).map(([k,v])=><div key={k}><SlidersHorizontal size={16}/><span>{k.replaceAll('_',' ')}</span><strong>{String(v)}</strong></div>)}</div><p className="muted">Server-side enforcement is authoritative; UI controls are not a security boundary.</p></section>}
-function ExecutionPage({overview,refresh}:{overview:Overview|null;refresh:()=>void}){const trip=async()=>{await fetch('/api/runtime/kill-switch?enabled=true',{method:'POST'});refresh()};return <section className="panel critical"><LockKeyhole size={28}/><h3>Live Execution Locked</h3><p>This baseline intentionally rejects live mode. Before enabling it, implement isolated signing, allowlisted routers/tokens, simulation, idempotency, nonce management, slippage controls, chain reorg handling and operational approval.</p><button className="kill" onClick={trip}>TRIP KILL SWITCH</button><div className="kv"><span>Mode</span><b>{overview?.mode??'—'}</b><span>Trading enabled</span><b>{String(overview?.trading_enabled??false)}</b><span>Kill switch</span><b>{String(overview?.kill_switch??true)}</b></div></section>}
+function ExecutionPage({overview,refresh,pagesMode}:{overview:Overview|null;refresh:()=>void;pagesMode:boolean}){const trip=async()=>{if(pagesMode)return;await fetch('/api/runtime/kill-switch?enabled=true',{method:'POST'});refresh()};return <section className="panel critical"><LockKeyhole size={28}/><h3>Live Execution Locked</h3><p>{pagesMode?'GitHub Pages is a static read-only demo. It cannot submit transactions, mutate runtime state, or connect to a signer.':'This baseline intentionally rejects live mode. Before enabling it, implement isolated signing, allowlisted routers/tokens, simulation, idempotency, nonce management, slippage controls, chain reorg handling and operational approval.'}</p><button className="kill" onClick={trip} disabled={pagesMode}>{pagesMode?'STATIC DEMO — NO MUTATIONS':'TRIP KILL SWITCH'}</button><div className="kv"><span>Mode</span><b>{overview?.mode??'—'}</b><span>Trading enabled</span><b>{String(overview?.trading_enabled??false)}</b><span>Kill switch</span><b>{String(overview?.kill_switch??true)}</b></div></section>}
 function AuditPage({audit}:{audit:any[]}){return <section className="panel"><h3>Immutable Audit Feed (baseline view)</h3>{audit.map((a,i)=><div className="audit" key={i}><span className="mono">{a.time}</span><b>{a.event}</b><span>{a.actor}</span><span>{a.result}</span></div>)}</section>}
 function Empty({title,text}:{title:string;text:string}){return <section className="panel empty"><h3>{title}</h3><p>{text}</p></section>}
 function Gate({text}:{text:string}){return <div><span className="dot"></span>{text}<b>REQUIRED</b></div>}

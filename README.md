@@ -49,6 +49,13 @@ ZEARN analyzes blockchain wallet behavior, ranks candidate wallets, generates ri
 
 These defaults are also covered by backend tests.
 
+
+## GitHub Pages
+
+The public dashboard can be deployed as a static, read-only GitHub Pages site at `https://cvsz.github.io/zearn/`.
+
+GitHub Pages does **not** host the FastAPI backend. The Pages build therefore runs in an explicit demo mode with no signer, no live funds, no transaction submission, and no state-changing controls. For the full local control plane, use Docker Compose as documented below.
+
 ## Run locally
 
 ```bash
