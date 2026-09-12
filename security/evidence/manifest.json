@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "evidence": [
+    {"id": "codeql-sarif", "kind": "sarif", "producer": "github/codeql-action", "required": true, "retention": "github-security"},
+    {"id": "dependency-review", "kind": "audit", "producer": "actions/dependency-review-action", "required": true, "retention": "workflow-log"},
+    {"id": "backend-sbom", "kind": "sbom", "format": "cyclonedx-json", "required": true, "retention": "workflow-artifact"},
+    {"id": "frontend-sbom", "kind": "sbom", "format": "cyclonedx-json", "required": true, "retention": "workflow-artifact"},
+    {"id": "container-scan", "kind": "vulnerability-report", "format": "sarif-or-json", "required": true, "retention": "workflow-artifact"},
+    {"id": "agent-policy-audit", "kind": "policy-evidence", "source": ["AGENTS.md", "tests/corpus/harness/compatibility.json"], "required": true, "retention": "repository"}
+  ]
+}
