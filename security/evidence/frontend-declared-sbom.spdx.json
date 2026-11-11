@@ -1,0 +1,21 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "zearn-frontend-declared-dependencies",
+  "documentNamespace": "https://github.com/cvsz/zearn/security/evidence/frontend-declared-sbom",
+  "creationInfo": {"creators": ["Tool: ZEARN evidence baseline"], "created": "2026-09-13T00:00:00Z"},
+  "packages": [
+    {"name":"@vitejs/plugin-react","SPDXID":"SPDXRef-Package-vite-plugin-react","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"vite","SPDXID":"SPDXRef-Package-vite","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"typescript","SPDXID":"SPDXRef-Package-typescript","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"react","SPDXID":"SPDXRef-Package-react","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"react-dom","SPDXID":"SPDXRef-Package-react-dom","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"lucide-react","SPDXID":"SPDXRef-Package-lucide-react","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"@types/react","SPDXID":"SPDXRef-Package-types-react","versionInfo":"latest","downloadLocation":"NOASSERTION"},
+    {"name":"@types/react-dom","SPDXID":"SPDXRef-Package-types-react-dom","versionInfo":"latest","downloadLocation":"NOASSERTION"}
+  ],
+  "annotations": [
+    {"annotationType":"OTHER","annotator":"Tool: ZEARN evidence baseline","annotationDate":"2026-09-13T00:00:00Z","comment":"This is a declared-dependency snapshot. Replace 'latest' with lockfile-resolved versions when a package lock is introduced."}
+  ]
+}

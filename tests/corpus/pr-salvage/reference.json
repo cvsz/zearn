@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "stale-pr-green-salvage",
+      "input": {"state": "open", "ci": "success", "mergeable": true, "days_stale": 21, "unresolved_threads": 0},
+      "expected": {"action": "salvage", "next": "refresh_then_merge"},
+      "invariants": ["do_not_close_green_work", "revalidate_head_before_merge"]
+    },
+    {
+      "id": "stale-pr-unresolved-review",
+      "input": {"state": "open", "ci": "success", "mergeable": true, "days_stale": 14, "unresolved_threads": 2},
+      "expected": {"action": "hold", "reason": "unresolved_review_threads"},
+      "invariants": ["never_merge_with_unresolved_review"]
+    },
+    {
+      "id": "reopen-after-fix",
+      "input": {"state": "closed", "closed_reason": "ci_failure", "fix_commit_present": true, "ci": "success"},
+      "expected": {"action": "reopen", "next": "review"},
+      "invariants": ["preserve_history", "avoid_duplicate_pr"]
+    }
+  ]
+}

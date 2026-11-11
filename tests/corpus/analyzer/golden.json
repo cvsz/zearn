@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "analyzer-profitable-copyable",
+      "input": {"trades": 80, "realized_pnl_usd": 4200, "win_rate": 0.66, "max_drawdown_pct": 9.5, "median_liquidity_usd": 450000, "wash_trade_score": 0.03},
+      "expected": {"classification": "candidate", "score_min": 75},
+      "invariants": ["realized_pnl_only", "liquidity_adjusted", "minimum_sample_enforced"]
+    },
+    {
+      "id": "analyzer-survivorship-trap",
+      "input": {"trades": 3, "realized_pnl_usd": 18000, "win_rate": 1.0, "max_drawdown_pct": 0.0, "median_liquidity_usd": 22000, "wash_trade_score": 0.01},
+      "expected": {"classification": "reject", "reason": "insufficient_sample"},
+      "invariants": ["no_never_lost_claim", "minimum_sample_enforced"]
+    },
+    {
+      "id": "analyzer-wash-trading-risk",
+      "input": {"trades": 240, "realized_pnl_usd": 33000, "win_rate": 0.84, "max_drawdown_pct": 4.1, "median_liquidity_usd": 800000, "wash_trade_score": 0.91},
+      "expected": {"classification": "reject", "reason": "manipulation_risk"},
+      "invariants": ["wash_trading_penalty", "do_not_copy_raw_pnl"]
+    }
+  ]
+}

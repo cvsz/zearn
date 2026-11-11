@@ -45,6 +45,16 @@ jobs:
       - uses: actions/checkout@v7
       - run: docker compose build
 
+  evidence-corpus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate regression corpora and evidence manifests
+        run: python tools/validate_evidence.py
+
   repository-security-baseline:
     runs-on: ubuntu-latest
     steps:
